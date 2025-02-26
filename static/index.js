@@ -1,5 +1,5 @@
 
-const socket = new WebSocket("ws://localhost:8765");
+const socket = new WebSocket("ws://192.168.68.108:8765");
 
 function joinChat(event){
     if(localStorage.getItem("id") == null) {
@@ -54,6 +54,7 @@ let event_handler = {
         localStorage.setItem('id', data.id);
         localStorage.setItem('name', data.name);
         console.log(localStorage);
+        $("#username").text(localStorage.getItem('name') + ":");
     },
     'broadcast': (data)=>{
         displayMessage(data);
