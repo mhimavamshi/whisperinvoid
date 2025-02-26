@@ -10,6 +10,7 @@
         <!-- Messages (SVGs with text) will appear here -->
     </div>
     <div class="area">
+        <span id="username"></span>
         <input type="text" id="messageinput" placeholder="Press enter to whisper">
         <input type="button" id="whisper" value="whisper">
     </div>
@@ -76,6 +77,12 @@
 
     #whisper:hover {
         background-color: #222222;
+    }
+
+    #username {
+        padding: 1%;
+        font-size: 16px;       
+        font-weight: bold;
     }
 
 </style>
