@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whisper</title>
+</head>
+<body>
+    <div class="void">
+        <!-- Messages (SVGs with text) will appear here -->
+    </div>
+    <div class="area">
+        <input type="text" id="messageinput" placeholder="Press enter to whisper">
+        <input type="button" id="whisper" value="whisper">
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+    const socket = new WebSocket("ws://localhost:8765");
+
+    socket.addEventListener("open", (event)=>{
+        if(localStorage.getItem("id") == null) {
+            socket.send(JSON.stringify({"event": "join"}));
+        }
+    });
+
+    let event_handler = {
+        'join': (data)=>{
+            
+        }
+    }
+
+    socket.addEventListener("message", (event)=>{
+        console.log("Message from server ", event.data);
+        let data = JSON.parse(event.data);
+        event_handler[data.event](data);
+    });
+
+    var i = 0;
+
+    let username = "username";
+
+    function getPosition(boxSizeX, boxSizeY) {
+        var containerWidth = $(".void").width();
+        var containerHeight = $(".void").height();
+        var x = Math.floor(Math.random() * containerWidth);
+        var y = Math.floor(Math.random() * containerHeight);
+        return { x: x, y: y };
+    }
+
+    $("#whisper").on("click", ()=>{
+        ++i;
+
+        let messageText = $("#messageinput").val();
+
+        const width = 900;
+        const height = 100;
+
+        let svgMessage = $(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+                <!-- Background rectangle -->
+                <rect x="0" y="0" width="${width}" height="${height}" fill="#000000" />
+                
+                <text x="0" y="10" font-size="16" fill="white" text-decoration="underline">${username}</text>
+            
+                <text x="0" y="50%" font-size="16" fill="white">${messageText}</text>
+            </svg>
+        `);
+
+        var position = getPosition(width, height);
+        svgMessage.css({
+            position: "absolute",
+            left: position.x + "px",
+            top: position.y + "px",
+            opacity: 1,
+        });
+
+        $(".void").append(svgMessage);
+
+        svgMessage.fadeOut(2000, () => {
+            console.log(`message ${i} done.`);
+        });
+
+        // $("#messageinput").val('');
+    });
+
+    $("#messageinput").on('keypress', (e)=>{
+        if(e.which == 13) {
+            $("#whisper").click();
+            e.preventDefault();
+        }
+    });
+</script>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .void {
+        flex: 1;
+        overflow: hidden; 
+        position: relative; 
+        background-color: #000000;
+    }
+
+
+    .area {
+        position: fixed;
+        /* bottom: 8; */
+        width: 100%;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .message {
+        background-color: #000000;
+        color: white;
+        padding-left: 5%;
+        padding-right: 5%;
+        align-items: center;
+    }
+
+
+    #messageinput {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        /* border: 1px solid #ccc; */
+        /* border-radius: 4px; */
+    }
+
+    #whisper {
+        padding-left: 1%;
+        padding-right: 1%;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #000000;
+        color: white;
+        transition: background-color 0.3s;
+    }
+
+    #whisper:hover {
+        background-color: #222222;
+    }
+
+</style>
+</html>
