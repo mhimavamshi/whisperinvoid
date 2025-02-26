@@ -11,6 +11,6 @@ This is made to learn asynchronous programming in python.
 $ pip install -r requirements.txt
 $ python server.py 
 ```
-
+Then visit http://localhost:5000 or whichever HTTP_PORT is
 server.py is a single file which asynchronously runs both HTTP and WebSocket server
 
