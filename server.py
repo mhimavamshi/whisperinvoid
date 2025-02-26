@@ -7,12 +7,6 @@ import os
 import json
 import random
 
-'''
-generate an unique id for a new connection and use it to check if same socket is connecting again
-generate an unique name for a new connection associated with the id to broadcast to everyone
-
-'''
-
 class User:
     def __init__(self, websocket, adjectives):
         # self.id = self.generate_id()
@@ -201,7 +195,5 @@ async def main():
         if runner is not None: 
             print("Shutting down HTTP server")
             await runner.cleanup()
-
-
 
 asyncio.run(main())
