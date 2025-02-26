@@ -71,8 +71,10 @@ class UserContainer:
         if user_id: self.remove_id(user_id)
 
     def clear(self):
-        del self.sockets_to_id
-        del self.users
+        # del self.sockets_to_id
+        # del self.users
+        self.sockets_to_id.clear()
+        self.users.clear()
 
     def __del__(self):
         self.clear()
@@ -195,5 +197,6 @@ async def main():
         if runner is not None: 
             print("Shutting down HTTP server")
             await runner.cleanup()
+        
 
 asyncio.run(main())
