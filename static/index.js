@@ -1,5 +1,5 @@
 
-const socket = new WebSocket("ws://192.168.68.108:8765");
+const socket = new WebSocket("ws://localhost:8765");
 
 function joinChat(event){
     if(localStorage.getItem("id") == null) {
@@ -36,7 +36,7 @@ function displayMessage(data){
 
     $(".void").append(svgMessage);
 
-    svgMessage.fadeOut(2000);
+    svgMessage.fadeOut(5000);
 
     // $("#messageinput").val('');
 }
